@@ -4,7 +4,7 @@ Library implementing a simple page-change swipe system.
 __swipe-handler__ implements the __SwipeHandler__ class which manages the
 visibility of a collection of document elements in response to finger swipes.
 
-# Example of use
+## Example of use
 
 The swipe handler manages the visibility of the child elements of some _container_.
 Typically _container_ will be a document <body> or <div> element and by default
@@ -24,4 +24,11 @@ var swipeHandler = new SwipeHandler({ container: document.body });
 ```
 will adopt the <object> element content, initially exposing just the first element
 and hiding all others.  A right-to-left finger-swipe will hide the displayed element
-and reveal the next in sequence.
+and reveal the next in sequence, rolling around to the first element at the end of
+the sequence.  A lef-to-right finger-swipe reverses direction.
+  
+## Setting up the swipe handler
+
+## new SwipeHandler(options)
+
+
