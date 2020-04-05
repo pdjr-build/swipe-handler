@@ -27,11 +27,14 @@ class SwipeHandler {
             this.panels.forEach(panel => panel.classList.add('hidden'));
             this.panels[0].classList.remove('hidden');
 
-            if (zone) {
-                zone.addEventListener('touchstart', function(e) { this.touchStart(e); }.bind(this), false);
-                zone.addEventListener('touchend', function(e) { this.touchEnd(e); }.bind(this), false);
-            }
+            if (zone) this.addZone(zone);
         }
+    }
+
+
+    addZone(zone) {
+        zone.addEventListener('touchstart', function(e) { this.touchStart(e); }.bind(this), false);
+        zone.addEventListener('touchend', function(e) { this.touchEnd(e); }.bind(this), false);
     }
 
     touchStart(e) {
