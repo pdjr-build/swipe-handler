@@ -25,9 +25,29 @@ var swipeHandler = new SwipeHandler({ container: document.body });
 will adopt the <object> element content, initially exposing just the first element
 and hiding all others.  A right-to-left finger-swipe will hide the displayed element
 and reveal the next in sequence, rolling around to the first element at the end of
-the sequence.  A lef-to-right finger-swipe reverses direction.
+the sequence.  A left-to-right finger-swipe reverses direction.
   
 ## Setting up the swipe handler
+
+There are two broad implementation scenarios.
+
+The first is when the content to be made swipe-able is loaded as part of a single
+document and once the document is fully loaded it is available for adoption by the
+swipe system.  In this case, __SwipeHandler__ can be instantiated by passing the
+container of the swipe-able content to the class constructor and allowing the
+system to automatically configure.  For example:
+```
+<body onLoad="new SwipeHandler({ container: document.body });">
+  <div> ...swipe-able content part one... </div>
+  <div> ...swipe-able content part two... </div>
+  ...
+</body>
+```
+
+
+The second is when the content to be
+made swipe-able is loaded asynchronously alongside the main document or programmatically
+after the main document has itself loaded: in this situation
 
 ## new SwipeHandler(options)
 
