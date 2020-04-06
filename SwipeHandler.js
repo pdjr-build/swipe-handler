@@ -27,26 +27,30 @@ class SwipeHandler {
             this.panels.forEach(panel => panel.classList.add('hidden'));
             this.panels[0].classList.remove('hidden');
 
-            if (zone) this.addZone(zone);
+            zone = (zone)?zone:panel;
+
+            this.addZone(zone);
         }
     }
 
 
     addZone(zone) {
-        zone.addEventListener('touchstart', function(e) { this.touchStart(e); }.bind(this), false);
-        zone.addEventListener('touchend', function(e) { this.touchEnd(e); }.bind(this), false);
+        if (zone) {
+            zone.addEventListener('touchstart', function(e) { this.touchStart(e); }.bind(this), false);
+            zone.addEventListener('touchend', function(e) { this.touchEnd(e); }.bind(this), false);
+        } else {
+            alert("Bad zone");
+        }
     }
 
     touchStart(e) {
         if (this.options.debug) console.log("Swipe.touchStart(%s)...", e);
-        alert("start");
         this.touch.startX = e.changedTouches[0].screenX;
         this.touch.startY = e.changedTouches[0].screenY;
     }
 
     touchEnd(e) {
         if (this.options.debug) console.log("Swipe.touchEnd(%s)...", e);
-        alert("end");
         this.touch.endX = e.changedTouches[0].screenX;
         this.touch.endY = e.changedTouches[0].screenY;
         this.handleGesture();
@@ -54,28 +58,24 @@ class SwipeHandler {
 
     handleGesture() {
         if (this.options.debug) console.log("Swipe.handleGesture()...");
-        alert("handle");
-
         if ((this.touch.endX < this.touch.startX) && (this.touch.startX - this.touch.endX) > this.options.sensitivity) this.swipeLeft();
         if ((this.touch.endX > this.touch.startX) && (this.touch.endX - this.touch.startX) > this.options.sensitivity) this.swipeRight();
     }
 
     swipeLeft() {
         if (this.options.debug) console.log("Swipe.swipeLeft()...");
-        alert("left");
+
+        this.panels.push(this.panels.shift());
+        this.panels.forEach(panel => panel.classList.add('hidden'));
+        this.panels[0].classList.remove('hidden');
     }
 
     swipeRight() {
         if (this.options.debug) console.log("Swipe.swipeRight()...");
-        alert("right");
 
-        if ((!this.options.callback) || (this.options.callback(this.touch))) {
-            var target = -1;
-            for (var i = 0; i < this.panels.length; i++) {
-                if (!this.panels[i].classList.contains("hidden")) { target = i; this.panels[i].classList.add("hidden"); }
-            }; 
-            this.panels[(((target + 1) < this.panels.length)?(target + 1):0)].classList.remove("hidden");
-        }
+        this.panels.unshift(this.panels.pop());
+        this.panels.forEach(panel => panel.classList.add('hidden'));
+        this.panels[0].classList.remove('hidden');
     }
 
 }
