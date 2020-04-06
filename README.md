@@ -1,10 +1,40 @@
 # swipe-handler
-Library implementing a simple page-change swipe system.
 
-__swipe-handler__ implements the __SwipeHandler__ class which manages the
-visibility of a collection of document elements in response to finger swipes.
+Library implementing __SwipeHandler__, a class supporting a simple, configurable,
+swipe gesture handler.
 
-## Example of use
+__SwipeHandler__ applies and removes specified CSS classes to a user-defined collection
+of document elements in response to finger swipes.  At any point in time, only one
+of the elements in the collection will be undecorated by the specified classes.
+
+By default, __SwipeHandler__ operates with the __.hidden__ CSS class and this inverted
+selection model supports the most likely use case in which __SwipeHandler__ is used to
+control the visibility of a set of page components.  The user will normally only need
+to add the CSS definition ```.hidden { display: none; }``` for the system to operate.
+
+__SwipeHandler__ is instantiated by a call to ```new SwipeHandler([options])```.  The
+_options_ argument is not required, but can be used to tailor the behaviour of
+the handler to suit user requirements.  The following options properties are available.
+
+__container__
+: a document element or querySelection string identifying the DOM
+             element whose children should form the swipe collection.
+  classname: a string containing one or more space-separated class names which
+             will be applied to elements in the swipe collection.  Defaults to
+             'hidden'.
+  callback:  a user supplied function which will be called after the swipe system
+             detects a swipe, but before it implements any changes to the DOM. The
+             callback is passed an object containing the start end end positions of
+             the detected swipe and if it returns false the swipe response will be
+             cancelled.
+  leftbutton:
+
+the callddddsupports a number of usage patterns.  
+
+Most aspects of __SwipeHandler__ are configurable through the following user-defined
+options.
+
+
 
 The swipe handler manages the visibility of the child elements of some _container_.
 Typically _container_ will be a document <body> or <div> element and by default
