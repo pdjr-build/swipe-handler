@@ -3,13 +3,20 @@
 Library implementing __SwipeHandler__, a class supporting a simple, configurable,
 swipe gesture handler.
 
-__SwipeHandler__ monitors an arbitrary collection of document elements for swipe
-gestures.  The handler provides built-in support for toggling CSS classes in
-response to a swipe and implements a callback mechanism which can be used by
-the host application alongside or instead of this default behaviour.
+__SwipeHandler__ manages an arbitrary collection of document elements called
+_panels_ waiting for a swipe gesture on one or more associated _zones_ that
+satisfies some defined _sensitivity_ threshold.
 
-The document element collection monitored by __SwipeHandler__ can be built at once
-or incrementally allowing the handler to be used in both static and dynamic document
+By default the system assumes that a _panel_ is its own _zone_ and uses a
+default _sensitivity_ which gives a reasonable response for full screen
+swipes.
+
+The handler provides in-built support for toggling the CSS class of _panels_
+in response to swipes, but also implements a callback mechanism which can be
+used by the host application alongside or instead of this default behaviour.
+
+The _panel_ collection monitored by __SwipeHandler__ can be built at once or
+incrementally allowing the handler to be used in both static and dynamic document
 contexts.
 
 __SwipeHandler__ is instantiated by a call to ```new SwipeHandler([options])```.
@@ -19,9 +26,9 @@ the handler to suit user requirements.  The following options properties are ava
 __options.container__
 
 A string selector (suitable for use with JavaScript's ```querySelection()``` function)
-or a JS reference to a DOM element whose children constitute the swipe collection.  The
-value supplied is used once during instantiation of the __SwipeHandler__ and use of this
-setting may be inapproprate if the host document is built dynamically or asynchronously.
+or a JS reference to a DOM element whose children constitute the swipe _panel_ collection.
+The value supplied is used once during instantiation of the __SwipeHandler__ and use of
+this option may be inapproprate if the host document is built dynamically or asynchronously.
 
 Examples: { container: document.body }, { container: "#swipeables" }.
 
@@ -45,6 +52,18 @@ containing the start end end positions of the detected swipe and a reference to 
 that triggered the response.  The callback can do whatever it likes, but should return true
 if it requires the handler's default CSS manipulation to proceed, otherwise false.
 
+__options.subdocumenttags__
+
+An array specifying _panel_ containers which will be assumed to hold a sub-document.  The
+default value is [ 'object' ].
+
+Sub-documents require special handling because the swipe detection zone cannot simply be
+associate with the _panel_ root element, but must be placed in the contained document
+context.  The swipe system asynchronously associates the _zone_ for a _panel_ tag in the
+__options.subdocumenttags__ list with the contentDocument.window element of the
+sub-document.  Cross-origin security prevents the swipe system operating with sub-documents
+that do not originate from the same domain as the parent document.
+
 Example: { callback: function(o) { beep(); return(true); } }
 
 __options.leftbutton__
@@ -57,7 +76,7 @@ options might be useful if your application supports interfaces without touch ca
 If your application provides buttons for non-swipe enabled interfaces, then these can be
 linked through these properties.
 
-Example: { leftbutton: document.getELementById('left-button'), rightbutton: 'right-button' }
+Example: { leftbutton: document.getElementById('left-button'), rightbutton: 'right-button' }
 
 __options.sensitivity__
 
@@ -97,8 +116,8 @@ the sequence.  A left-to-right finger-swipe reverses direction.
 ## Setting up the swipe handler
 
 The simplest way to set up a document for __SwipeHandler__ is to establish an arbitrary
-container and to place within it the document components which will be under swipe system
-control.  For example:
+container and to place within it the document components which constitute the _panels_
+which will be under swipe system control.  For example:
 ```
 <htm>
 <head>
@@ -109,56 +128,14 @@ control.  For example:
   <body onLoad="new SwipeContainer({ container: document.body });">
     <div class="panel">Page 1</div>
     <div class="panel">Page 2</div>
-    <div class="panel">Page 3</div>
+    <object class="panel" src="/sub/document/"></object>
   </body>
 </html>
 ```
-The content of the <div> elements which will be under swipe system control can be
-dynamic, but <div> elements themselves must be present when the document has loaded.
+The content of the _panel_ elements can be dynamic, but the _panel_ root elements (in
+the example, the <div> elements) must be present when the document has loaded.
 If you need to add an element to the swipe system after the host document has loaded
 then consider using the ``addPanel()``` method described below.
-    
-One particular case in which the above approach will not work is illustrated in the
-following example.
-```
-<htm>
-<head>
-  <style>
-    .panel { height: 100vh; width: 100vw; }
-    .hidden { display: none; }
-  </style>
-  <body onLoad="new SwipeContainer({ container: document.body });">
-    <object class="panel" src="/some/url"/>
-    <object class="panel" src="/some/other/url"/>
-    <object class="panel" src="/some/further/url"/>
-  </body>
-</html>
-```
-The swipe system needs to reach inside the documents referenced by the object src tags
-in order to attach its required touch event handlers.  However, browser's will load
-these sub-documents asynchronously and the onLoad event on the main document will trigger
-before these loads have completed.  It won't work.
-
-The solution is to add controlled elements dynamically as each of the sub-documents are
-loaded.  One way of doing this is to wait for the appearance of a contentDocument.window
-component inside each of the <object> elements and the to use the ```addPanel()``` method
-to update 
-
-There are two broad implementation scenarios.
-
-1. The elements which must be under __SwipeHandler__ control are loaded into the DOM.
-   Note that the content of The first is when the content to be made swipe-able is loaded as part of a single
-document and once the document is fully loaded it is available for adoption by the
-swipe system.  In this case, __SwipeHandler__ can be instantiated by passing the
-container of the swipe-able content to the class constructor and allowing the
-system to automatically configure.  For example:
-```
-<body onLoad="new SwipeHandler({ container: document.body });">
-  <div> ...swipe-able content part one... </div>
-  <div> ...swipe-able content part two... </div>
-  ...
-</body>
-```
 
 
 
