@@ -23,7 +23,8 @@ class SwipeHandler {
         if ((options.callback) && (typeof options.callback != 'function')) throw "Swipe: callback is not a function (options.callback)";
         if ((options.leftbutton) && (typeof options.leftbutton == 'string')) options.leftbutton = document.getElementById(options.leftbutton);
         if ((options.rightbutton) && (typeof options.rightbutton == 'string')) options.rightbutton = document.getElementById(options.rightbutton);
-        if (!options.sensitivity) options.sensitivity = 200, ;
+        if (!options.sensitivity) options.sensitivity = 200;
+        if (!options.sdtags) options.sdtags = [ 'object' ]; 
         if (!options.classname) options.classname = 'hidden';
         
         this.options = options;
@@ -41,9 +42,23 @@ class SwipeHandler {
 
         if (panel) {
             this.panels.push(panel);
-            this.panels.forEach(panel => panel.classList.add(options.classname));
-            this.panels[0].classList.remove(options.classname);
-            this.addZone((zone)?zone:panel);
+            this.panels.forEach(panel => panel.classList.add(this.options.classname));
+            this.panels[0].classList.remove(this.options.classname);
+            if (!zone) {
+                if (this.options.sdtags.map(tag => tag.toLowerCase()).includes(panel.nodeName.toLowerCase())) {
+                    (function wait() {
+                        if (panel.contentWindow == null) {
+                            setTimeout(wait, 500);
+                        } else {
+                            this.addZone(panel.contentWindow);
+                        }
+                    }.bind(this))();
+                } else {
+                    this.addZone(panel);
+                }
+            } else {
+                this.addZone(zone);
+            }
         }
     }
 
