@@ -105,7 +105,7 @@ within it the document components that constitute the _panels_ which will be und
 swipe system control.  Since the system default is to use ```document.body``` as the
 default container, the simplest approach is something like this.
 ```
-<htm>
+<html>
 <head>
   <style>
     .panel { height: 100vh; width: 100vw; }
@@ -123,6 +123,33 @@ the example, the <div> and <object> elements) must be present when the browser t
 the document loaded event.
     
 If you need to add an element to the swipe system after the host document has loaded
-then consider using the ``addPanel()``` method described below.
+then consider using the ```addPanel()``` method described below.
 
 ## Methods
+
+### addPanel(panel, [zone])
+
+Adds document element _panel_ to __SwipeHandler__'s panel collection.  If document element zone is specified then it is used as the gesture detection region for _panel_.  _panel_ and _zone_ can be specified by either a document reference or by a string suitable for use with the JS ```querySelection()``` function.      
+```
+<html>
+<head>
+  <style>
+    .swipe-container { width: 100vw; height: 100vh; }
+    .swipe-container div { height: 100%; width: 30%; background-color: red; }
+    .grey-back { background-color: grey; }
+  </style>
+  <script>
+  function build(sh) {
+    for (var i = 0; i < 3; i++) {
+      var p = document.createElement('div');
+      document.getElementById('swipe-container').appendChild(p);
+      sh.addPanel(p, document.body);
+    }
+  }
+  </script>
+  <body onLoad="build(new SwipeHandler({ container: '#swipe-container', classname: "grey-back"  })); ">
+    <div id="swipe-container">
+    </div>
+  </body>
+</html>
+```
