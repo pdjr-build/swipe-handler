@@ -105,8 +105,12 @@ within it the document components that constitute the _panels_ which will be und
 swipe system control.  Since the system default is to use ```document.body``` as the
 default container, the simplest approach is something like this.
 ```
+<!DOCTYPE html>
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>SwipeHandler example</title>
+  <script type="text/javascript" src="lib/swipe-handler/SwipeHandler.js"></script>
   <style>
     .panel { height: 100vh; width: 100vw; display: none; }
     .swipehandler-selected { display: block; }
@@ -131,8 +135,12 @@ then consider using the ```addPanel()``` method described below.
 
 Adds document element _panel_ to __SwipeHandler__'s panel collection.  If document element zone is specified then it is used as the gesture detection region for _panel_.  _panel_ and _zone_ can be specified by either a document reference or by a string suitable for use with the JS ```querySelection()``` function.      
 ```
+<!DOCTYPE html>
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>SwipeHandler example</title>
+  <script type="text/javascript" src="lib/swipe-handler/SwipeHandler.js"></script>
   <style>
     .swipe-container { width: 100vw; height: 100vh; }
     .swipe-container div { height: 100%; width: 30%; background-color: grey; }
