@@ -42,9 +42,9 @@ Examples: { container: document.getElementById("swipeables") }, { container: nul
 __options.classname__
 
 A string containing zero or more space-separated CSS class names which will be applied
-to elements in the swipe collection.  If undefined, then the value "hidden" will be used.
-To stop the handler from applying any class changes set this value to null or the empty
-string.
+to the currently selected _panel_ in the swipe collection.  If undefined, then the value
+"swipehandler-selected" will be used. To stop the handler from applying any class changes
+set this value to null or the empty string.
 
 Example: { classname: "redbackground flashbackground" }
 
@@ -108,8 +108,8 @@ default container, the simplest approach is something like this.
 <html>
 <head>
   <style>
-    .panel { height: 100vh; width: 100vw; }
-    .hidden { display: none; }
+    .panel { height: 100vh; width: 100vw; display: none; }
+    .swipehandler-selected { display: block; }
   </style>
   <body onLoad="new SwipeHandler();">
     <div class="panel">Page 1</div>
@@ -135,8 +135,8 @@ Adds document element _panel_ to __SwipeHandler__'s panel collection.  If docume
 <head>
   <style>
     .swipe-container { width: 100vw; height: 100vh; }
-    .swipe-container div { height: 100%; width: 30%; background-color: red; }
-    .grey-back { background-color: grey; }
+    .swipe-container div { height: 100%; width: 30%; background-color: grey; }
+    .swipehandler-selected { background-color: red; }
   </style>
   <script>
   function build(sh) {
@@ -147,7 +147,7 @@ Adds document element _panel_ to __SwipeHandler__'s panel collection.  If docume
     }
   }
   </script>
-  <body onLoad="build(new SwipeHandler({ container: '#swipe-container', classname: "grey-back"  })); ">
+  <body onLoad="build(new SwipeHandler({ container: '#swipe-container' })); ">
     <div id="swipe-container">
     </div>
   </body>

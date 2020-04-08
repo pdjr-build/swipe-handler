@@ -19,13 +19,15 @@ class SwipeHandler {
 	constructor(options={}) { 
         if ((options) && (options.debug)) console.log("Swipe(%s)...", JSON.stringify(options));
 
+        if (options.container === undefined) options.container = document.body;
         if ((options.container) && (typeof options.container == 'string')) options.container = document.querySelector(options.container);
         if ((options.callback) && (typeof options.callback != 'function')) throw "Swipe: callback is not a function (options.callback)";
         if ((options.leftbutton) && (typeof options.leftbutton == 'string')) options.leftbutton = document.getElementById(options.leftbutton);
         if ((options.rightbutton) && (typeof options.rightbutton == 'string')) options.rightbutton = document.getElementById(options.rightbutton);
         if (!options.sensitivity) options.sensitivity = 200;
         if (!options.sdtags) options.sdtags = [ 'object' ]; 
-        if (!options.classname) options.classname = 'hidden';
+        if (options.classname === undefined) options.classname = 'swipehandler-selected';
+        if (options.classname === null) options.classname = "";
         
         this.options = options;
         this.panels = [];
@@ -42,8 +44,7 @@ class SwipeHandler {
 
         if (panel) {
             this.panels.push(panel);
-            this.panels.forEach(panel => panel.classList.add(this.options.classname));
-            this.panels[0].classList.remove(this.options.classname);
+            if this.panels.length == 1) this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
             if (!zone) {
                 if (this.options.sdtags.map(tag => tag.toLowerCase()).includes(panel.nodeName.toLowerCase())) {
                     (function wait() {
@@ -97,17 +98,17 @@ class SwipeHandler {
     swipeLeft() {
         if (this.options.debug) console.log("Swipe.swipeLeft()...");
 
-        this.panels[0].classList.add(options.classname);
+        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.remove(cn));
         this.panels.push(this.panels.shift());
-        this.panels[0].classList.remove(options.classname);
+        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
     }
 
     swipeRight() {
         if (this.options.debug) console.log("Swipe.swipeRight()...");
 
-        this.panels[0].classList.add(options.classname);
+        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.remove(cn));
         this.panels.unshift(this.panels.pop());
-        this.panels[0].classList.remove(options.classname);
+        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
     }
 
 }
