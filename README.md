@@ -124,7 +124,7 @@ default container, the simplest approach is something like this.
 
 ```
 The content of the _panel_ elements can be dynamic, but the _panel_ root elements (in
-the example, the <div> and <object> elements) must be present when the browser triggers
+the example, the ```<div>``` and ```<object>``` elements) must be present when the browser triggers
 the document loaded event.
     
 If you need to add an element to the swipe system after the host document has loaded
