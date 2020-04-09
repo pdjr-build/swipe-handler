@@ -118,14 +118,13 @@ default container, the simplest approach is something like this.
   <body onLoad="new SwipeHandler();">
     <div class="panel">Page 1</div>
     <div class="panel">Page 2</div>
-    <object class="panel" src="/some/document/"></object>
+    <div class="panel">Page 3</div>
   </body>
 </html>
-
 ```
 The content of the _panel_ elements can be dynamic, but the _panel_ root elements (in
-the example, the ```<div>``` and ```<object>``` elements) must be present when the browser triggers
-the document loaded event.
+the example, the ```<div>``` elements) must be present when the browser triggers the
+document loaded event.
     
 If you need to add an element to the swipe system after the host document has loaded
 then consider using the ```addPanel()``` method described below.
