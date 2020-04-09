@@ -24,31 +24,38 @@ contexts.
 ## Instantiating and configuring SwipeHandler
 
 __SwipeHandler__ is instantiated by a call to ```new SwipeHandler([options])```.
-The _options_ argument is not required, but can be used to tailor the behaviour of
-the handler to suit user requirements.  The following options properties are available.
+The optional _options_ object is not required, but can be used to tailor the behaviour
+of the handler.  The following _options_ properties are available.
 
-__options.container__
+__container__
 
-A string selector (suitable for use with JavaScript's ```querySelection()``` function)
-or a JS reference to a DOM element whose children constitute the swipe _panel_ collection.
-If no container is specified, the default ```document.body``` will be used.  To disable
-container-style processing, set this value to null.
+A JS DOM element reference or a string selector expression suitable for use with JavaScript's
+```querySelection()``` function: the children of the resolved DOM element constitute the
+swipe handler's _panel_ collection.  The supplied value is used once during instantiation
+of the __SwipeHandler__ and use of this option may be inapproprate if the host document
+is built dynamically or asynchronously.
 
-The value supplied is used once during instantiation of the __SwipeHandler__ and use of
-this option may be inapproprate if the host document is built dynamically or asynchronously.
+If no container is specified, the default ```document.body``` will be used.
+
+Setting this value to ```null``` will disable container-based construction of the _panel_
+collection.
 
 Examples: { container: document.getElementById("swipeables") }, { container: null }.
 
-__options.classname__
+__classname__
 
-A string containing zero or more space-separated CSS class names which will be applied
-to the currently selected _panel_ in the swipe collection.  If undefined, then the value
-"swipehandler-selected" will be used. To stop the handler from applying any class changes
-set this value to null or the empty string.
+A string giving a CSS class names which will be applied by __SwipeHandler__ exclusively
+to the member of the _panel_ collection which is currently selected.
 
-Example: { classname: "redbackground flashbackground" }
+If undefined, then the value ```swipe-selected``` will be used.
 
-__options.callback__
+Setting this value to null or to the empty string will stop the handler from applying
+any changes to the DOM when a swipe is detected, but management of the current selection
+will continue and any configured callback function will be executed.
+
+Example: { classname: "flash" }
+
+__callback__
 
 A boolean function which will be called after the swipe system detects a swipe, but before
 it implements any changes to the DOM.  The callback function is passed an object of the form:
@@ -59,22 +66,24 @@ containing the start end end positions of the detected swipe and a reference to 
 that triggered the response.  The callback can do whatever it likes, but should return true
 if it requires the handler's default CSS manipulation to proceed, otherwise false.
 
-__options.sdtags__
+__sdtags__
 
-An array specifying _panel_ containers which will be assumed to hold a sub-document.  The
-default value is [ 'object' ].
+An array specifying document tag names which contain sub-documents.
+
+If undefined, then the value ```[ 'object', 'iframe' ]``` will be used.
 
 Sub-documents require special handling because the swipe detection zone cannot simply be
 associate with the _panel_ root element, but must be placed in the contained document
-context.  The swipe system asynchronously associates the _zone_ for a _panel_ tag in the
-__options.sdtags__ list with the ```contentDocument.window``` element of the
-sub-document.  Cross-origin security prevents the swipe system operating with sub-documents
-that do not originate from the same domain as the parent document.
+context.  The swipe system asynchronously associates the _zone_ for a _panel_ with a
+root tag in __sdtags__ with the ```contentDocument.window``` element of the panel root.
+Note that cross-origin security restrictions prevents the swipe system operating directly
+on sub-documents that do not originate from the same domain as the parent document: the
+situation is easily dealt with by wrapping the sub-document element in ```<div>```.
 
 Example: { callback: function(o) { beep(); return(true); } }
 
-__options.leftbutton__
-__options.rightbutton__
+__leftbutton__
+__rightbutton__
 
 A DOM element reference or a ```querySelection``` string to which the __SwipeHandler__ will
 attach a click event handler to stand in lieu of swipe left and swipe right gestures.  These
@@ -85,14 +94,14 @@ linked through these properties.
 
 Example: { leftbutton: document.getElementById('left-button'), rightbutton: 'right-button' }
 
-__options.sensitivity__
+__sensitivity__
 
 An object of the form ```{ distance: pixels, interval: millis }``` which specifies the minimum
 distance in pixels a touch must move to be considered a swipe and the maximum interval in
 milliseconds between swipe initiation (touchstart) and completion (touchend).  The default value
 is ```{ distance: 200, interval: 500 }```.
 
-__options.debug__
+__debug__
 
 A boolean value (default is false) indicating that diagnostic output should be written to
 the console.
@@ -118,7 +127,9 @@ default container, the simplest approach is something like this.
   <body onLoad="new SwipeHandler();">
     <div class="panel">Page 1</div>
     <div class="panel">Page 2</div>
-    <div class="panel">Page 3</div>
+    <div class="panel">
+        <object src="https://www.google.com/" />
+    </div>
   </body>
 </html>
 ```
