@@ -109,7 +109,7 @@ default container, the simplest approach is something like this.
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>SwipeHandler example</title>
+  <title>SwipeHandler Example 1</title>
   <script type="text/javascript" src="lib/swipe-handler/SwipeHandler.js"></script>
   <style>
     .panel { height: 100vh; width: 100vw; display: none; align-items: center; justify-content: center; }
@@ -140,25 +140,29 @@ Adds document element _panel_ to __SwipeHandler__'s panel collection.  If docume
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>SwipeHandler example</title>
+  <title>SwipeHandler Example 2</title>
   <script type="text/javascript" src="lib/swipe-handler/SwipeHandler.js"></script>
   <style>
-    .swipe-container { width: 100vw; height: 100vh; }
-    .swipe-container div { height: 100%; width: 30%; background-color: grey; }
+    #swipe-container { display: table; width: 100%; min-height: 200px; }
+    #swipe-zone { width: 100%; min-height: 100px; text-align: center; line-height: 100px; background-color: blue; }
+    .swipe-panel { display: table-cell; text-align: center; line-height: 200px; border: white solid 3px; background-color: grey; }
     .swipehandler-selected { background-color: red; }
   </style>
   <script>
   function build(sh) {
     for (var i = 0; i < 3; i++) {
       var p = document.createElement('div');
+      p.className = 'swipe-panel';
+      p.appendChild(document.createTextNode("Panel " + i));
       document.getElementById('swipe-container').appendChild(p);
-      sh.addPanel(p, document.body);
+      sh.addPanel(p, document.getElementById('swipe-zone'));
     }
   }
   </script>
-  <body onLoad="build(new SwipeHandler({ container: '#swipe-container' })); ">
-    <div id="swipe-container">
-    </div>
-  </body>
+</head>
+<body onLoad="build(new SwipeHandler({ container: '#swipe-container' })); ">
+  <div id='swipe-container'></div>
+  <div id='swipe-zone'>SWIPE HERE</div>
+</body>
 </html>
 ```
