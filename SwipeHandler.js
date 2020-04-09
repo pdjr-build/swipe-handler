@@ -34,7 +34,7 @@ class SwipeHandler {
         this.touch = { startX: 0, startY: 0, endX: 0, endY: 0 };
 
         if (this.options.container) {
-            var children = this.options.container.childNodes();
+            var children = this.options.container.children;
             [...children].forEach(child => this.addPanel(child));
         }
     }
@@ -44,7 +44,7 @@ class SwipeHandler {
 
         if (panel) {
             this.panels.push(panel);
-            if this.panels.length == 1) this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
+            if (this.panels.length == 1) this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
             if (!zone) {
                 if (this.options.sdtags.map(tag => tag.toLowerCase()).includes(panel.nodeName.toLowerCase())) {
                     (function wait() {
