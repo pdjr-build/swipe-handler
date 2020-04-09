@@ -112,8 +112,8 @@ default container, the simplest approach is something like this.
   <title>SwipeHandler example</title>
   <script type="text/javascript" src="lib/swipe-handler/SwipeHandler.js"></script>
   <style>
-    .panel { height: 100vh; width: 100vw; display: none; }
-    .swipehandler-selected { display: block; }
+    .panel { height: 100vh; width: 100vw; display: none; align-items: center; justify-content: center; }
+    .swipehandler-selected { display: flex; }
   </style>
   <body onLoad="new SwipeHandler();">
     <div class="panel">Page 1</div>
@@ -121,6 +121,7 @@ default container, the simplest approach is something like this.
     <object class="panel" src="/some/document/"></object>
   </body>
 </html>
+
 ```
 The content of the _panel_ elements can be dynamic, but the _panel_ root elements (in
 the example, the <div> and <object> elements) must be present when the browser triggers
