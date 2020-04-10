@@ -26,8 +26,7 @@ class SwipeHandler {
         if ((options.rightbutton) && (typeof options.rightbutton == 'string')) options.rightbutton = document.getElementById(options.rightbutton);
         if (!options.sensitivity) options.sensitivity = 200;
         if (!options.sdtags) options.sdtags = [ 'object' ]; 
-        if (options.classname === undefined) options.classname = 'swipehandler-selected';
-        if (options.classname === null) options.classname = "";
+        if (options.classname === undefined) options.classname = 'swipe-selected';
         
         this.options = options;
         this.panels = [];
@@ -44,7 +43,7 @@ class SwipeHandler {
 
         if (panel) {
             this.panels.push(panel);
-            if (this.panels.length == 1) this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
+            if ((this.options.classname) && (this.panels.length == 1)) this.panels[0].classList.add(this.options.classname);
             if (!zone) {
                 if (this.options.sdtags.map(tag => tag.toLowerCase()).includes(panel.nodeName.toLowerCase())) {
                     (function wait() {
@@ -66,6 +65,8 @@ class SwipeHandler {
 
     addZone(zone) {
         if (this.options.debug) console.log("Swipe.addZone(%s)...", zone);
+        
+        if (typeof zone === 'string') zone = document.querySelection(zone);
 
         if (zone) {
             zone.addEventListener('touchstart', function(e) { this.touchStart(e); }.bind(this), false);
@@ -85,7 +86,7 @@ class SwipeHandler {
 
         this.touch.endX = e.changedTouches[0].screenX;
         this.touch.endY = e.changedTouches[0].screenY;
-        if ((!options.callback) || (options.callback(this.touch))) this.handleGesture();
+        if ((!this.options.callback) || (this.options.callback(this.touch))) this.handleGesture();
     }
 
     handleGesture() {
@@ -98,17 +99,17 @@ class SwipeHandler {
     swipeLeft() {
         if (this.options.debug) console.log("Swipe.swipeLeft()...");
 
-        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.remove(cn));
+        this.panels[0].classList.remove(this.options.classname);
         this.panels.push(this.panels.shift());
-        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
+        this.panels[0].classList.add(this.options.classname);
     }
 
     swipeRight() {
         if (this.options.debug) console.log("Swipe.swipeRight()...");
 
-        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.remove(cn));
+        this.panels[0].classList.remove(this.options.classname);
         this.panels.unshift(this.panels.pop());
-        this.options.classname.split(' ').forEach(cn => this.panels[0].classList.add(cn));
+        this.panels[0].classList.add(this.options.classname);
     }
 
 }
