@@ -30,6 +30,7 @@ class SwipeHandler {
         
         this.options = options;
         this.panels = [];
+        this.zones = [];
         this.touch = { startX: 0, startY: 0, endX: 0, endY: 0 };
 
         if (this.options.container) {
@@ -68,9 +69,10 @@ class SwipeHandler {
         
         if (typeof zone === 'string') zone = document.querySelection(zone);
 
-        if (zone) {
-            zone.addEventListener('touchstart', function(e) { this.touchStart(e); }.bind(this), false);
-            zone.addEventListener('touchend', function(e) { this.touchEnd(e); }.bind(this), false);
+        if ((zone) && (!this.zones.includes(zone))) {
+            this.zones.push(zone);
+            zone.addEventListener('touchstart', function(e) { this.touchStart(e); }.bind(this), true);
+            zone.addEventListener('touchend', function(e) { this.touchEnd(e); }.bind(this), true);
         }
     }
 
