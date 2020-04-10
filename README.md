@@ -3,16 +3,20 @@
 Library implementing __SwipeHandler__, a class supporting a simple, configurable,
 swipe gesture handler.
 
-__SwipeHandler__ attaches to an arbitrary collection of document elements called
-_panels_ waiting for a swipe gesture on one or more associated _zones_ that
+__SwipeHandler__ attaches to an arbitrary ordered collection of document elements
+called _panels_ waiting for a swipe gesture on one or more associated _zones_ that
 satisfies some defined _sensitivity_ threshold.
+
+__SwipeHanler__ applies a unary current selection model to the _panel_ collection
+and initially identifies the first element as the _selected panel_.  
+
 
 By default the system assumes that a _panel_ is its own _zone_ and uses a
 default _sensitivity_ which gives a reasonable response for full screen
 swipes.
 
-When a swipe is detected the handler will perform some action: the built-in default
-action just toggles the CSS class of _panels_ using a strategy which maintains the
+When a valid swipe is detected the handler will perform some action: the built-in
+default action is toggles the CSS class of _panels_ using a strategy which maintains the
 idea of a 'selected' panel.  Swiping moves the selected panel forwards and backwards
 through the _panel_ collection.  Other, or additional, actions can be implemented
 by the host application and executed through a callback mechanism.
