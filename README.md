@@ -201,8 +201,7 @@ function.
 
 ### addButtons(left, right)
 
-Adds a click hendler to document elements _left_ and _right_.
-When the specified elements are clicked the system simply triggers the swipe
-right and swipe left event handling procedures. 
+Adds a click handler to the DOM elements ispecified by _left_ and _right_
+which will stand in lieu of swipe-right and swipe-left gestures.
 This is a dynamic alternative to specifying the configuration options
 leftbutton and rightbutton.
