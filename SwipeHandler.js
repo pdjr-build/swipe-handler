@@ -63,11 +63,18 @@ class SwipeHandler {
         }
     }
 
-    addButtons(left, right) {
-        if (typeof left == 'string') left = document.querySelection(left);
-        if (typeof right == 'string') right = document.querySelection(right);
-        if (left) left.addEventHandler('click', this.swipeRight); 
-        if (right) right.addEventHandler('click', this.swipeLeft); 
+    addLeftButton(reference) {
+        if (reference) {
+            reference = (typeof reference === 'string')?document.querySelectorAll(reference):[reference];
+            reference.forEach(element => element.addEventHandler('click', this.swipeRight)); 
+        }
+    }
+
+    addRightButton(reference) {
+        if (reference) {
+            reference = (typeof reference === 'string')?document.querySelectorAll(reference):[reference];
+            reference.forEach(element => element.addEventHandler('click', this.swipeLeft)); 
+        }
     }
 
     addZone(zone) {
